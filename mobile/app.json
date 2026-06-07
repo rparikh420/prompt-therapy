@@ -8,7 +8,10 @@
     "backgroundColor": "#0a0a0f",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.prompttherapy.app"
+      "bundleIdentifier": "com.prompttherapy.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.prompttherapy.app",
@@ -21,6 +24,12 @@
     ],
     "experiments": {
       "typedRoutes": false
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f3f402ab-730c-44fa-97e5-ec81da486996"
+      }
     }
   }
 }
