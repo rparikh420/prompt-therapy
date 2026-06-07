@@ -29,7 +29,7 @@ export default function TherapyPage() {
         transition={{ delay: 0.2, duration: 0.5 }}
         className="flex-1 min-h-0"
       >
-        <GlassCard className="flex flex-col h-[calc(100vh-14rem)] overflow-hidden">
+        <GlassCard className="flex flex-col h-[calc(100dvh-14rem)] overflow-hidden">
           <TherapistChat onReadyToGraduate={() => navigate("/graduation")} />
         </GlassCard>
       </motion.div>

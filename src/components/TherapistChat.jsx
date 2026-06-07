@@ -30,9 +30,6 @@ export default function TherapistChat({ onReadyToGraduate }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
 
   const handleSend = async () => {
     const text = input.trim();

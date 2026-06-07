@@ -222,7 +222,7 @@ export default function IntakeForm() {
               transition={{ duration: 0.35, ease: "easeOut" }}
             >
               <ProgressDots current={currentQ} total={questions.length} />
-              <GlassCard className="p-8">
+              <GlassCard className="p-5 sm:p-8">
                 <p className="text-xs text-violet-400 font-medium mb-2 uppercase tracking-[0.15em]">
                   Question {currentQ + 1} of {questions.length}
                 </p>
@@ -261,7 +261,7 @@ export default function IntakeForm() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
-              <GlassCard className="p-8 text-center">
+              <GlassCard className="p-5 sm:p-8 text-center">
                 <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
                   <p className="text-xs text-slate-500 uppercase tracking-[0.2em] mb-2">Your Diagnosis</p>
                 </motion.div>

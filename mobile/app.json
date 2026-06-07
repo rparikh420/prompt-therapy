@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "Prompt Therapy",
+    "slug": "prompt-therapy",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "prompttherapy",
+    "backgroundColor": "#0a0a0f",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.prompttherapy.app"
+    },
+    "android": {
+      "package": "com.prompttherapy.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0a0a0f"
+      }
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}
