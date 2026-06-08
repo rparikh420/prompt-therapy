@@ -1,17 +1,22 @@
 import FloatingOrbs from "./FloatingOrbs";
+import { MotionConfigProvider } from "./MotionConfig";
 
 export default function Layout({ children }) {
   return (
-    <div
-      className="grain-overlay relative min-h-screen"
-      style={{
-        background: "linear-gradient(145deg, #0a0a0f 0%, #1a1025 40%, #0f0a1a 70%, #0a0a0f 100%)",
-      }}
-    >
-      <FloatingOrbs />
-      <div className="relative z-10 w-full max-w-2xl mx-auto px-4 py-8">
-        {children}
+    <MotionConfigProvider>
+      <div
+        className="grain-overlay relative min-h-screen"
+        style={{
+          background: "linear-gradient(145deg, #07070d 0%, #111827 40%, #0c1220 70%, #07070d 100%)",
+          backgroundSize: "200% 200%",
+          animation: "ambient-gradient 30s ease infinite",
+        }}
+      >
+        <FloatingOrbs />
+        <div className="relative z-10 w-full max-w-lg mx-auto px-6 py-10">
+          {children}
+        </div>
       </div>
-    </div>
+    </MotionConfigProvider>
   );
 }
