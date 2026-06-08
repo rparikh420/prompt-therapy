@@ -1,39 +1,22 @@
-import { motion } from "framer-motion";
+import AnimatedPressable from "./AnimatedPressable";
 
 const variants = {
   primary: "bg-violet-600 text-white glow-violet hover:bg-violet-500",
-  secondary: "bg-white/[0.06] text-white border border-white/[0.15] hover:border-white/[0.3] hover:bg-white/[0.1]",
+  secondary: "bg-white/[0.04] text-white border border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.06]",
   success: "bg-emerald-600 text-white glow-emerald hover:bg-emerald-500",
-  ghost: "text-violet-400 hover:text-violet-300 hover:bg-white/[0.05]",
+  ghost: "text-violet-400 hover:text-violet-300 hover:bg-white/[0.04]",
 };
 
-export default function Button({
-  children,
-  variant = "primary",
-  size = "md",
-  loading = false,
-  className = "",
-  ...props
-}) {
-  const sizeClasses = {
-    sm: "px-4 py-2 text-sm",
-    md: "px-6 py-3 text-base",
-    lg: "px-10 py-4 text-lg",
-  };
-
+export default function Button({ children, variant = "primary", size = "md", loading = false, className = "", ...props }) {
+  const sizeClasses = { sm: "px-5 py-2.5 text-sm", md: "px-7 py-3.5 text-base", lg: "px-10 py-4 text-lg" };
   return (
-    <motion.button
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.97 }}
+    <AnimatedPressable
       className={[
-        "font-semibold rounded-full cursor-pointer transition-all duration-300",
-        sizeClasses[size],
-        variants[variant],
-        loading ? "opacity-70 pointer-events-none" : "",
-        className,
+        "font-semibold rounded-full transition-colors duration-200",
+        sizeClasses[size], variants[variant],
+        loading ? "opacity-60 pointer-events-none" : "", className,
       ].filter(Boolean).join(" ")}
-      disabled={loading}
-      {...props}
+      disabled={loading} {...props}
     >
       {loading ? (
         <span className="flex items-center gap-2 justify-center">
@@ -43,9 +26,7 @@ export default function Button({
           </svg>
           {children}
         </span>
-      ) : (
-        children
-      )}
-    </motion.button>
+      ) : children}
+    </AnimatedPressable>
   );
 }
