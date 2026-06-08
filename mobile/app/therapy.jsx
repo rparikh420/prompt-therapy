@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
-import { MotiView } from 'moti';
+import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import GlassCard from '../components/GlassCard';
 import TherapistChat from '../components/TherapistChat';
@@ -15,10 +15,8 @@ export default function TherapyPage() {
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-      <MotiView
-        from={{ opacity: 0, translateY: -10 }}
-        animate={{ opacity: 1, translateY: 0 }}
-        transition={{ type: 'timing', duration: 500 }}
+      <Animated.View
+        entering={FadeInDown.delay(0).springify().damping(20)}
         style={styles.header}
       >
         <Text style={styles.label}>Post-Recovery Session</Text>
@@ -26,18 +24,16 @@ export default function TherapyPage() {
         <Text style={styles.subtitle}>
           You survived 5 steps. Now talk about your feelings — to an AI, obviously.
         </Text>
-      </MotiView>
+      </Animated.View>
 
-      <MotiView
-        from={{ opacity: 0, translateY: 20 }}
-        animate={{ opacity: 1, translateY: 0 }}
-        transition={{ type: 'timing', duration: 500, delay: 200 }}
+      <Animated.View
+        entering={FadeInUp.delay(200).springify().damping(20)}
         style={styles.chatWrapper}
       >
         <GlassCard style={styles.chatCard}>
           <TherapistChat onReadyToGraduate={() => router.push('/graduation')} />
         </GlassCard>
-      </MotiView>
+      </Animated.View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

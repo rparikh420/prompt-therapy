@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
-import { MotiView } from 'moti';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import GlassCard from '../components/GlassCard';
 import Button from '../components/Button';
@@ -27,46 +27,39 @@ export default function LandingPage() {
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <MotiView
-          from={{ opacity: 0, translateY: 30 }}
-          animate={{ opacity: 1, translateY: 0 }}
-          transition={{ type: 'timing', duration: 800 }}
+        <Animated.View
+          entering={FadeInDown.delay(0).springify().damping(20)}
           style={styles.content}
         >
-          <MotiView
-            from={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: 'timing', duration: 500, delay: 100 }}
+          <Animated.View
+            entering={FadeInDown.delay(50).springify().damping(20)}
             style={styles.badge}
           >
             <Text style={styles.badgeText}>5-Step Recovery Program</Text>
-          </MotiView>
+          </Animated.View>
 
-          <MotiView from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ type: 'timing', duration: 600, delay: 200 }}>
+          <Animated.View entering={FadeInDown.delay(100).springify().damping(20)}>
             <Text style={styles.title}>Prompt Therapy</Text>
-          </MotiView>
+          </Animated.View>
 
-          <MotiView from={{ opacity: 0, translateY: 10 }} animate={{ opacity: 1, translateY: 0 }} transition={{ type: 'timing', duration: 600, delay: 300 }}>
+          <Animated.View entering={FadeInDown.delay(150).springify().damping(20)}>
             <Text style={styles.subtitle}>
               Because your relationship with AI has become...{' '}
               <Text style={styles.subtitleAccent}>concerning.</Text>
             </Text>
-          </MotiView>
+          </Animated.View>
 
           <GlassCard style={styles.quoteCard}>
-            <MotiView
-              animate={{ opacity: quoteVisible ? 1 : 0 }}
-              transition={{ type: 'timing', duration: 350 }}
-              style={styles.quoteInner}
+            <Animated.View
+              entering={FadeInDown.delay(200).springify().damping(20)}
+              style={[styles.quoteInner, { opacity: quoteVisible ? 1 : 0 }]}
             >
               <Text style={styles.quoteText}>"{quotes[quoteIndex]}"</Text>
-            </MotiView>
+            </Animated.View>
           </GlassCard>
 
-          <MotiView
-            from={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: 'timing', duration: 500, delay: 600 }}
+          <Animated.View
+            entering={FadeInDown.delay(250).springify().damping(20)}
             style={styles.buttonSection}
           >
             <Button size="lg" onPress={() => router.push('/intake')}>
@@ -75,8 +68,8 @@ export default function LandingPage() {
             <Text style={styles.disclaimer}>
               No AI was harmed in the making of this program. Several were roasted.
             </Text>
-          </MotiView>
-        </MotiView>
+          </Animated.View>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );

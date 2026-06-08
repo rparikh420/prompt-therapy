@@ -1,11 +1,12 @@
-import { useRef, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, Linking } from 'react-native';
 import { useRouter } from 'expo-router';
-import { MotiView } from 'moti';
+import Animated, { FadeInDown, useAnimatedStyle, useSharedValue, withRepeat, withTiming, withDelay } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import GlassCard from '../components/GlassCard';
 import Button from '../components/Button';
+import APressable from '../components/AnimatedPressable';
 import { colors } from '../theme';
 import { NATURE_WEBCAMS, CONFETTI_COLORS } from '../../shared/content';
 
@@ -20,11 +21,24 @@ const confettiPieces = Array.from({ length: 20 }, (_, i) => ({
 }));
 
 function ConfettiPiece({ piece }) {
+  const translateY = useSharedValue(800);
+  const opacity = useSharedValue(0);
+  const scale = useSharedValue(0);
+
+  useEffect(() => {
+    const delayMs = piece.delay * 1000;
+    translateY.value = withDelay(delayMs, withRepeat(withTiming(-200, { duration: piece.duration }), -1, false));
+    opacity.value = withDelay(delayMs, withRepeat(withTiming(1, { duration: piece.duration / 2 }), -1, true));
+    scale.value = withDelay(delayMs, withRepeat(withTiming(1, { duration: piece.duration / 3 }), -1, true));
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }, { scale: scale.value }],
+    opacity: opacity.value,
+  }));
+
   return (
-    <MotiView
-      from={{ translateY: 800, opacity: 1, scale: 0 }}
-      animate={{ translateY: -200, opacity: [0, 1, 0], scale: [0, 1, 0.5] }}
-      transition={{ type: 'timing', duration: piece.duration, delay: piece.delay * 1000, loop: true }}
+    <Animated.View
       style={[
         styles.confetti,
         {
@@ -34,6 +48,7 @@ function ConfettiPiece({ piece }) {
           backgroundColor: piece.color,
           borderRadius: piece.isCircle ? piece.size : 2,
         },
+        animatedStyle,
       ]}
     />
   );
@@ -57,7 +72,7 @@ export default function GraduationPage() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <MotiView from={{ opacity: 0, translateY: 30 }} animate={{ opacity: 1, translateY: 0 }} transition={{ type: 'timing', duration: 600 }}>
+        <Animated.View entering={FadeInDown.delay(0).springify().damping(20)}>
           <View style={styles.certBorderWrap}>
             <LinearGradient
               colors={['#8b5cf6', '#f43f5e', '#8b5cf6', '#14b8a6', '#8b5cf6']}
@@ -88,9 +103,9 @@ export default function GraduationPage() {
               </View>
             </LinearGradient>
           </View>
-        </MotiView>
+        </Animated.View>
 
-        <MotiView from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ type: 'timing', duration: 600, delay: 400 }}>
+        <Animated.View entering={FadeInDown.delay(200).springify().damping(20)}>
           <GlassCard style={styles.quoteCard}>
             <View style={styles.quoteInner}>
               <Text style={styles.quoteText}>
@@ -98,22 +113,22 @@ export default function GraduationPage() {
               </Text>
             </View>
           </GlassCard>
-        </MotiView>
+        </Animated.View>
 
-        <MotiView from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ type: 'timing', duration: 600, delay: 600 }}>
+        <Animated.View entering={FadeInDown.delay(400).springify().damping(20)}>
           <Text style={styles.note}>
             You survived 5 steps of brutal honesty and a therapy session. Most people relapse at Step 2.
           </Text>
-        </MotiView>
+        </Animated.View>
 
-        <MotiView from={{ opacity: 0, translateY: 20 }} animate={{ opacity: 1, translateY: 0 }} transition={{ type: 'timing', duration: 600, delay: 800 }} style={styles.actions}>
+        <Animated.View entering={FadeInDown.delay(600).springify().damping(20)} style={styles.actions}>
           <Button variant="success" size="lg" onPress={handleTouchGrass}>
             Go Touch Grass
           </Button>
-          <TouchableOpacity onPress={() => router.push('/')}>
-            <Text style={styles.restart}>Start Over (we won't judge… much)</Text>
-          </TouchableOpacity>
-        </MotiView>
+          <APressable onPress={() => router.push('/')}>
+            <Text style={styles.restart}>Start Over (we won't judge... much)</Text>
+          </APressable>
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -126,7 +141,7 @@ const styles = StyleSheet.create({
   certBorderWrap: { borderRadius: 20, overflow: 'hidden' },
   certGradientBorder: { padding: 2, borderRadius: 20 },
   certInner: {
-    backgroundColor: '#0f0a1a', borderRadius: 18,
+    backgroundColor: '#0a0e1a', borderRadius: 18,
     padding: 28, alignItems: 'center', gap: 8,
   },
   certLabel: { fontSize: 10, color: colors.primaryLight, fontWeight: '700', letterSpacing: 3, textTransform: 'uppercase' },

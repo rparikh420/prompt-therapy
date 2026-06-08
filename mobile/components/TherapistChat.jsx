@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet,
+  View, Text, TextInput, FlatList, StyleSheet,
 } from 'react-native';
-import { MotiView } from 'moti';
+import Animated, { FadeInUp, useAnimatedStyle, useSharedValue, withRepeat, withSpring, withDelay } from 'react-native-reanimated';
+import APressable from './AnimatedPressable';
 import { streamTherapistResponse } from '../lib/openai';
 import { colors } from '../theme';
 
@@ -10,16 +11,27 @@ function TypingIndicator() {
   return (
     <View style={styles.typingRow}>
       {[0, 1, 2].map((i) => (
-        <MotiView
-          key={i}
-          from={{ opacity: 0.3, translateY: 0 }}
-          animate={{ opacity: 1, translateY: -4 }}
-          transition={{ type: 'timing', duration: 400, delay: i * 200, loop: true, repeatReverse: true }}
-          style={styles.typingDot}
-        />
+        <TypingDot key={i} index={i} />
       ))}
     </View>
   );
+}
+
+function TypingDot({ index }) {
+  const translateY = useSharedValue(0);
+
+  useEffect(() => {
+    translateY.value = withDelay(
+      index * 200,
+      withRepeat(withSpring(-4, { damping: 4, stiffness: 200 }), -1, true)
+    );
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: translateY.value }],
+  }));
+
+  return <Animated.View style={[styles.typingDot, animatedStyle]} />;
 }
 
 export default function TherapistChat({ onReadyToGraduate }) {
@@ -73,10 +85,8 @@ export default function TherapistChat({ onReadyToGraduate }) {
   const showGraduateButton = exchangeCount.current >= 3 && !isStreaming;
 
   const renderMessage = ({ item: msg }) => (
-    <MotiView
-      from={{ opacity: 0, translateY: 10 }}
-      animate={{ opacity: 1, translateY: 0 }}
-      transition={{ type: 'timing', duration: 300 }}
+    <Animated.View
+      entering={FadeInUp.delay(50).springify().damping(20)}
       style={[styles.msgRow, msg.role === 'user' ? styles.msgRowUser : styles.msgRowAssistant]}
     >
       <View style={styles.msgWrap}>
@@ -93,7 +103,7 @@ export default function TherapistChat({ onReadyToGraduate }) {
           )}
         </View>
       </View>
-    </MotiView>
+    </Animated.View>
   );
 
   return (
@@ -115,9 +125,9 @@ export default function TherapistChat({ onReadyToGraduate }) {
       />
 
       {showGraduateButton && onReadyToGraduate && (
-        <TouchableOpacity onPress={onReadyToGraduate} style={styles.graduateBtn}>
+        <APressable onPress={onReadyToGraduate} style={styles.graduateBtn}>
           <Text style={styles.graduateText}>I'm ready to graduate →</Text>
-        </TouchableOpacity>
+        </APressable>
       )}
 
       <View style={styles.inputRow}>
@@ -131,13 +141,13 @@ export default function TherapistChat({ onReadyToGraduate }) {
           onSubmitEditing={handleSend}
           style={[styles.input, isStreaming && { opacity: 0.5 }]}
         />
-        <TouchableOpacity
+        <APressable
           onPress={handleSend}
           disabled={!input.trim() || isStreaming}
           style={[styles.sendBtn, (!input.trim() || isStreaming) && { opacity: 0.3 }]}
         >
           <Text style={styles.sendText}>Send</Text>
-        </TouchableOpacity>
+        </APressable>
       </View>
     </View>
   );

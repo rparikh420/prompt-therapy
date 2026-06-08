@@ -1,11 +1,13 @@
-import { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { MotiView } from 'moti';
+import Animated, { FadeInDown, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import GlassCard from '../../components/GlassCard';
 import Button from '../../components/Button';
 import ProgressBar from '../../components/ProgressBar';
+import APressable from '../../components/AnimatedPressable';
+import MiniConfetti from '../../components/MiniConfetti';
 import { colors } from '../../theme';
 import { STEPS } from '../../../shared/content';
 
@@ -16,33 +18,42 @@ const inputClasses = {
 };
 
 function BreathingCircle() {
+  const size = useSharedValue(80);
+  const opacity = useSharedValue(0.5);
+
+  useEffect(() => {
+    size.value = withRepeat(withTiming(160, { duration: 4000 }), -1, true);
+    opacity.value = withRepeat(withTiming(1, { duration: 4000 }), -1, true);
+  }, []);
+
+  const circleStyle = useAnimatedStyle(() => ({
+    width: size.value,
+    height: size.value,
+    opacity: opacity.value,
+  }));
+
+  const textStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+  }));
+
   return (
     <View style={styles.breathingWrap}>
-      <MotiView
-        from={{ width: 80, height: 80, opacity: 0.5 }}
-        animate={{ width: 160, height: 160, opacity: 1 }}
-        transition={{ type: 'timing', duration: 4000, loop: true, repeatReverse: true }}
-        style={styles.breathCircle}
-      />
-      <MotiView
-        from={{ opacity: 0.4 }}
-        animate={{ opacity: 1 }}
-        transition={{ type: 'timing', duration: 4000, loop: true, repeatReverse: true }}
-      >
+      <Animated.View style={[styles.breathCircle, circleStyle]} />
+      <Animated.View style={textStyle}>
         <Text style={styles.breathText}>Breathe in... and out...</Text>
-      </MotiView>
+      </Animated.View>
     </View>
   );
 }
 
 function CheckboxOption({ label, checked, onToggle }) {
   return (
-    <TouchableOpacity onPress={onToggle} activeOpacity={0.8} style={styles.checkRow}>
+    <APressable onPress={onToggle} style={styles.checkRow}>
       <View style={[styles.checkbox, checked && styles.checkboxChecked]}>
         {checked && <Text style={styles.checkmark}>✓</Text>}
       </View>
       <Text style={[styles.checkLabel, checked && styles.checkLabelChecked]}>{label}</Text>
-    </TouchableOpacity>
+    </APressable>
   );
 }
 
@@ -123,15 +134,20 @@ export default function RecoveryStep() {
   const stepNumber = parseInt(stepParam, 10);
   const step = STEPS[stepNumber - 1];
   const [inputValues, setInputValues] = useState({});
+  const [showCelebration, setShowCelebration] = useState(false);
+
+  useEffect(() => {
+    setShowCelebration(false);
+  }, [stepNumber]);
 
   if (!step) {
     return (
       <SafeAreaView style={styles.safe}>
         <View style={styles.notFound}>
           <Text style={styles.notFoundText}>Step not found. You okay?</Text>
-          <TouchableOpacity onPress={() => router.push('/')}>
+          <APressable onPress={() => router.push('/')}>
             <Text style={styles.homeLink}>Go home</Text>
-          </TouchableOpacity>
+          </APressable>
         </View>
       </SafeAreaView>
     );
@@ -140,11 +156,14 @@ export default function RecoveryStep() {
   const currentValue = inputValues[stepNumber] ?? '';
 
   const handleNext = () => {
-    if (stepNumber < STEPS.length) {
-      router.push(`/step/${stepNumber + 1}`);
-    } else {
-      router.push('/therapy');
-    }
+    setShowCelebration(true);
+    setTimeout(() => {
+      if (stepNumber < STEPS.length) {
+        router.push(`/step/${stepNumber + 1}`);
+      } else {
+        router.push('/therapy');
+      }
+    }, 800);
   };
 
   return (
@@ -152,11 +171,9 @@ export default function RecoveryStep() {
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <ProgressBar currentStep={stepNumber} />
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-        <MotiView
+        <Animated.View
           key={stepNumber}
-          from={{ opacity: 0, translateY: 30 }}
-          animate={{ opacity: 1, translateY: 0 }}
-          transition={{ type: 'timing', duration: 500 }}
+          entering={FadeInDown.springify().damping(20)}
         >
           <GlassCard>
             <View style={styles.cardInner}>
@@ -183,9 +200,9 @@ export default function RecoveryStep() {
 
               <View style={styles.navRow}>
                 {stepNumber > 1 ? (
-                  <TouchableOpacity onPress={() => router.push(`/step/${stepNumber - 1}`)}>
+                  <APressable onPress={() => router.push(`/step/${stepNumber - 1}`)}>
                     <Text style={styles.prevLink}>← Previous Step</Text>
-                  </TouchableOpacity>
+                  </APressable>
                 ) : <View />}
                 <Button size="sm" onPress={handleNext}>
                   {stepNumber < STEPS.length ? "I'm Ready to Move On" : 'Talk to Your Therapist'}
@@ -193,8 +210,9 @@ export default function RecoveryStep() {
               </View>
             </View>
           </GlassCard>
-        </MotiView>
+        </Animated.View>
       </ScrollView>
+      <MiniConfetti show={showCelebration} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -232,7 +250,6 @@ const styles = StyleSheet.create({
   breathingWrap: { alignItems: 'center', paddingVertical: 32, gap: 20 },
   breathCircle: {
     borderRadius: 999,
-    background: 'radial-gradient(circle, rgba(139,92,246,0.4) 0%, rgba(244,63,94,0.2) 60%, transparent 70%)',
     backgroundColor: 'rgba(139,92,246,0.3)',
   },
   breathText: { fontSize: 14, color: colors.textMuted, fontWeight: '500' },

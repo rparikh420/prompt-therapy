@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TextInput } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { useRouter } from 'expo-router';
-import { MotiView } from 'moti';
+import Animated, { FadeInRight, FadeInDown } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import GlassCard from '../components/GlassCard';
 import Button from '../components/Button';
+import APressable from '../components/AnimatedPressable';
 import { colors } from '../theme';
 import { questions, diagnoses, getDiagnosis, getQuestionScore } from '../../shared/content';
 
@@ -69,15 +70,14 @@ function ChoiceQuestion({ question, value, onChange }) {
       {question.options.map((option, i) => {
         const isSelected = value === i;
         return (
-          <TouchableOpacity
+          <APressable
             key={i}
             onPress={() => onChange(i)}
-            activeOpacity={0.8}
             style={[styles.choice, isSelected && styles.choiceSelected]}
           >
             <Text style={styles.choiceEmoji}>{option.emoji}</Text>
             <Text style={[styles.choiceLabel, isSelected && styles.choiceLabelSelected]}>{option.label}</Text>
-          </TouchableOpacity>
+          </APressable>
         );
       })}
     </View>
@@ -113,11 +113,9 @@ export default function IntakeForm() {
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {!showDiagnosis ? (
-          <MotiView
+          <Animated.View
             key={`q-${currentQ}`}
-            from={{ opacity: 0, translateX: 40 }}
-            animate={{ opacity: 1, translateX: 0 }}
-            transition={{ type: 'timing', duration: 350 }}
+            entering={FadeInRight.springify().damping(20)}
           >
             <ProgressDots current={currentQ} total={questions.length} />
             <GlassCard style={styles.card}>
@@ -133,12 +131,12 @@ export default function IntakeForm() {
                 )}
 
                 <View style={styles.nav}>
-                  <TouchableOpacity
+                  <APressable
                     onPress={() => currentQ > 0 && setCurrentQ((p) => p - 1)}
                     disabled={currentQ === 0}
                   >
                     <Text style={[styles.backBtn, currentQ === 0 && { opacity: 0.3 }]}>Back</Text>
-                  </TouchableOpacity>
+                  </APressable>
                   <Button
                     size="sm"
                     onPress={handleNext}
@@ -150,12 +148,10 @@ export default function IntakeForm() {
                 </View>
               </View>
             </GlassCard>
-          </MotiView>
+          </Animated.View>
         ) : (
-          <MotiView
-            from={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ type: 'timing', duration: 600 }}
+          <Animated.View
+            entering={FadeInDown.springify().damping(14).stiffness(120)}
           >
             <GlassCard style={styles.card}>
               <View style={styles.cardInner}>
@@ -172,7 +168,7 @@ export default function IntakeForm() {
                 <Text style={styles.ironyNote}>Don't worry, we'll use AI to cure your AI addiction. The irony is part of the therapy.</Text>
               </View>
             </GlassCard>
-          </MotiView>
+          </Animated.View>
         )}
       </ScrollView>
     </SafeAreaView>
@@ -201,7 +197,7 @@ const styles = StyleSheet.create({
   choice: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
     padding: 14, borderRadius: 12,
-    borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)',
+    borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)',
     backgroundColor: 'rgba(255,255,255,0.03)',
   },
   choiceSelected: { borderColor: 'rgba(124,58,237,0.5)', backgroundColor: 'rgba(124,58,237,0.1)' },
