@@ -14,7 +14,7 @@ export default function TherapyPage() {
         transition={{ duration: 0.5 }}
         className="text-center py-4"
       >
-        <span className="text-[10px] uppercase tracking-[0.3em] text-violet-400/60 font-medium">
+        <span className="text-[10px] uppercase tracking-[0.3em] text-violet-400/40 font-medium">
           Post-Recovery Session
         </span>
         <h1 className="text-display-md text-slate-100 mt-1">The Couch</h1>

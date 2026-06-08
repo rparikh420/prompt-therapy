@@ -35,7 +35,7 @@ function ConfettiPiece({ delay, x, size, color, shape }) {
   );
 }
 
-const confettiPieces = Array.from({ length: 30 }, (_, i) => ({
+const confettiPieces = Array.from({ length: 45 }, (_, i) => ({
   id: i,
   delay: Math.random() * 3,
   x: Math.random() * 100,
@@ -48,13 +48,13 @@ const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.3 },
+    transition: { staggerChildren: 0.1, delayChildren: 0.3 },
   },
 };
 
 const item = {
   hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  show: { opacity: 1, y: 0, transition: { type: "spring", damping: 20, stiffness: 90 } },
 };
 
 export default function GraduationPage() {
@@ -93,7 +93,7 @@ export default function GraduationPage() {
                 animation: "gradient-text-shift 4s ease infinite",
               }}
             >
-              <div className="bg-[#0f0a1a] rounded-lg p-8 sm:p-12 text-center">
+              <div className="bg-[#0a0e1a] rounded-lg p-8 sm:p-12 text-center">
                 <motion.p variants={item} className="mb-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-violet-400">
                   Certificate of Recovery
                 </motion.p>

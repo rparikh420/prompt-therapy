@@ -1,9 +1,10 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GlassCard from "../components/GlassCard";
 import Button from "../components/Button";
 import ProgressBar from "../components/ProgressBar";
+import MiniConfetti from "../components/MiniConfetti";
 import { STEPS } from '../../shared/content';
 
 function BreathingCircle() {
@@ -72,6 +73,9 @@ export default function RecoveryStep() {
   const stepIndex = stepNumber - 1;
   const step = STEPS[stepIndex];
   const [inputValues, setInputValues] = useState({});
+  const [showCelebration, setShowCelebration] = useState(false);
+
+  useEffect(() => { setShowCelebration(false); }, [stepNumber]);
 
   if (!step) {
     return (
@@ -86,15 +90,19 @@ export default function RecoveryStep() {
 
   const currentValue = inputValues[stepNumber] ?? "";
   const handleNext = () => {
-    if (stepNumber < STEPS.length) {
-      navigate(`/step/${stepNumber + 1}`);
-    } else {
-      navigate("/therapy");
-    }
+    setShowCelebration(true);
+    setTimeout(() => {
+      if (stepNumber < STEPS.length) {
+        navigate(`/step/${stepNumber + 1}`);
+      } else {
+        navigate("/therapy");
+      }
+    }, 800);
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex flex-col">
+    <div className="min-h-[calc(100vh-4rem)] flex flex-col relative">
+      <MiniConfetti show={showCelebration} />
       <ProgressBar currentStep={stepNumber} />
       <div className="flex-1 flex items-start justify-center pt-4">
         <motion.div key={stepNumber} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} transition={{ duration: 0.5, ease: "easeOut" }} className="w-full">

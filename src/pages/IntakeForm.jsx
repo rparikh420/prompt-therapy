@@ -22,7 +22,7 @@ function ProgressDots({ current, total }) {
           key={i}
           className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${
             i === current
-              ? "bg-violet-400 shadow-[0_0_8px_rgba(139,92,246,0.6)]"
+              ? "bg-violet-400 shadow-[0_0_6px_rgba(139,92,246,0.3)]"
               : i < current
                 ? "bg-violet-500/50"
                 : "bg-white/10"
@@ -76,8 +76,8 @@ function ChoiceQuestion({ question, value, onChange }) {
             whileTap={{ scale: 0.99 }}
             className={`w-full text-left p-4 rounded-xl border backdrop-blur-sm transition-all duration-200 cursor-pointer ${
               isSelected
-                ? "border-violet-500/50 bg-violet-500/10 shadow-[0_0_20px_rgba(124,58,237,0.15)]"
-                : "border-white/[0.08] bg-white/[0.03] hover:border-white/[0.15] hover:bg-white/[0.06]"
+                ? "border-violet-500/50 bg-violet-500/10 shadow-[0_0_12px_rgba(124,58,237,0.1)]"
+                : "border-white/[0.06] bg-white/[0.03] hover:border-white/[0.1] hover:bg-white/[0.05]"
             }`}
           >
             <span className="text-xl mr-3">{option.emoji}</span>
@@ -142,7 +142,7 @@ export default function IntakeForm() {
               transition={{ duration: 0.35, ease: "easeOut" }}
             >
               <ProgressDots current={currentQ} total={questions.length} />
-              <GlassCard className="p-5 sm:p-8">
+              <GlassCard className="p-5 sm:p-8" glow>
                 <p className="text-xs text-violet-400 font-medium mb-2 uppercase tracking-[0.15em]">
                   Question {currentQ + 1} of {questions.length}
                 </p>
@@ -185,7 +185,7 @@ export default function IntakeForm() {
                 <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
                   <p className="text-xs text-slate-500 uppercase tracking-[0.2em] mb-2">Your Diagnosis</p>
                 </motion.div>
-                <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6, type: "spring", stiffness: 200 }}>
+                <motion.div initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6, type: "spring", stiffness: 120, damping: 14 }}>
                   <p className="text-6xl font-black text-gradient mb-2">{score}</p>
                   <p className="text-sm text-slate-500 mb-4">out of 40</p>
                 </motion.div>

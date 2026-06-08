@@ -98,9 +98,9 @@ export default function TherapistChat({ onReadyToGraduate }) {
           {messages.map((msg, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 10, scale: 0.97 }}
+              initial={{ opacity: 0, y: 8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.3 }}
+              transition={{ type: "spring", damping: 20, stiffness: 120 }}
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div className="flex flex-col gap-1 max-w-[85%]">
@@ -148,7 +148,7 @@ export default function TherapistChat({ onReadyToGraduate }) {
           <button
             onClick={handleSend}
             disabled={!input.trim() || isStreaming}
-            className="px-5 py-3 bg-violet-600 text-white text-sm font-medium rounded-full hover:bg-violet-500 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer glow-violet"
+            className="px-5 py-3 bg-violet-600 text-white text-sm font-medium rounded-full hover:bg-violet-500 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
           >
             Send
           </button>
