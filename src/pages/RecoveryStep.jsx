@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useJourney } from "../context/JourneyContext";
 import GlassCard from "../components/GlassCard";
 import Button from "../components/Button";
 import ProgressBar from "../components/ProgressBar";
@@ -69,6 +70,7 @@ function StepInput({ step, value, onChange }) {
 export default function RecoveryStep() {
   const { step: stepParam } = useParams();
   const navigate = useNavigate();
+  const { saveStepResponse } = useJourney();
   const stepNumber = parseInt(stepParam, 10);
   const stepIndex = stepNumber - 1;
   const step = STEPS[stepIndex];
@@ -90,6 +92,10 @@ export default function RecoveryStep() {
 
   const currentValue = inputValues[stepNumber] ?? "";
   const handleNext = () => {
+    // Save the step response to journey context before navigating
+    if (currentValue) {
+      saveStepResponse(stepNumber, currentValue);
+    }
     setShowCelebration(true);
     setTimeout(() => {
       if (stepNumber < STEPS.length) {
@@ -112,7 +118,7 @@ export default function RecoveryStep() {
               <p className="text-lg text-violet-400 font-medium mb-6">{step.subtitle}</p>
             </motion.div>
             <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25, duration: 0.4 }} className="border-l-2 border-rose-500/50 bg-rose-500/[0.06] rounded-r-lg px-5 py-4 mb-8">
-              <p className="text-slate-400 italic leading-relaxed text-sm">"{step.quote}"</p>
+              <p className="text-slate-400 leading-relaxed text-sm font-serif-quote">&ldquo;{step.quote}&rdquo;</p>
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.4 }} className="mb-8">
               <h2 className="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-semibold mb-3">Exercise</h2>

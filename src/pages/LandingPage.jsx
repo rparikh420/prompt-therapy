@@ -34,7 +34,7 @@ export default function LandingPage() {
                 animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: -8, filter: "blur(4px)" }}
                 transition={{ duration: 0.4 }}
-                className="text-base sm:text-lg text-slate-300/90 italic leading-relaxed"
+                className="text-base sm:text-lg text-slate-300/90 leading-relaxed font-serif-quote"
               >&ldquo;{quotes[quoteIndex]}&rdquo;</motion.p>
             </AnimatePresence>
           </GlassCard>

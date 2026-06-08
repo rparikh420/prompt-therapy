@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useJourney } from "../context/JourneyContext";
 import { motion, AnimatePresence } from "framer-motion";
 import GlassCard from "../components/GlassCard";
 import Button from "../components/Button";
@@ -93,6 +94,7 @@ function ChoiceQuestion({ question, value, onChange }) {
 
 export default function IntakeForm() {
   const navigate = useNavigate();
+  const { saveIntake } = useJourney();
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState({});
   const [showDiagnosis, setShowDiagnosis] = useState(false);
@@ -111,6 +113,7 @@ export default function IntakeForm() {
     if (isLastQuestion) {
       const totalScore = questions.reduce((sum, _, i) => sum + getQuestionScore(questions, answers, i), 0);
       setScore(totalScore);
+      saveIntake(answers, totalScore);
       setShowDiagnosis(true);
     } else {
       setCurrentQ((prev) => prev + 1);

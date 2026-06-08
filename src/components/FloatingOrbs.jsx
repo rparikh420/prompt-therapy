@@ -14,7 +14,7 @@ export default function FloatingOrbs() {
     <div className="fixed inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
       {orbs.map((orb, i) => (
         <motion.div key={i} className={`${orb.className} rounded-full`}
-          style={{ background: orb.color, filter: "blur(100px)", opacity: 0.1 }}
+          style={{ background: orb.color, filter: "blur(100px)", opacity: 0.18 }}
           animate={shouldAnimate ? orb.animate : undefined}
           transition={shouldAnimate ? { duration: orb.duration, repeat: Infinity, ease: "easeInOut" } : undefined}
         />

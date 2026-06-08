@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { streamTherapistResponse } from "../lib/openai";
+import { useJourney } from "../context/JourneyContext";
 
 function TypingIndicator() {
   return (
@@ -19,6 +20,7 @@ function TypingIndicator() {
 }
 
 export default function TherapistChat({ onReadyToGraduate }) {
+  const { getJourneySummary } = useJourney();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
@@ -45,8 +47,10 @@ export default function TherapistChat({ onReadyToGraduate }) {
     setMessages([...updatedMessages, assistantMsg]);
 
     try {
+      const journeySummary = getJourneySummary();
       const stream = streamTherapistResponse(
-        updatedMessages.map((m) => ({ role: m.role, content: m.content }))
+        updatedMessages.map((m) => ({ role: m.role, content: m.content })),
+        journeySummary
       );
 
       let fullText = "";
@@ -87,10 +91,19 @@ export default function TherapistChat({ onReadyToGraduate }) {
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
         {messages.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-4xl mb-4">🛋️</p>
-            <p className="text-slate-400 text-sm mb-1">Welcome to your therapy session.</p>
-            <p className="text-slate-600 text-xs">Go ahead. Tell your AI therapist how you feel about your AI addiction.</p>
+          <div className="text-center py-12 px-4">
+            <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-violet-500/[0.08] border border-violet-500/[0.12] flex items-center justify-center">
+              <svg className="w-7 h-7 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155" />
+              </svg>
+            </div>
+            <p className="text-slate-300 text-base font-medium mb-2">Dr. Unplugged is ready for you.</p>
+            <p className="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto mb-4">
+              I've reviewed your case file. Let's talk about what brought you here today.
+            </p>
+            <p className="text-slate-600 text-xs font-serif-quote">
+              &ldquo;The couch is warm. The irony is thick. Begin when you're ready.&rdquo;
+            </p>
           </div>
         )}
 

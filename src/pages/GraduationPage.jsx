@@ -98,7 +98,7 @@ export default function GraduationPage() {
                   Certificate of Recovery
                 </motion.p>
                 <motion.div variants={item} className="mx-auto my-4 h-px w-24 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                <motion.p variants={item} className="mb-1 font-serif text-lg italic text-slate-400">
+                <motion.p variants={item} className="mb-1 text-lg text-slate-400 font-serif-quote">
                   This certifies that
                 </motion.p>
                 <motion.h1 variants={item} className="mb-2 text-display-lg text-gradient">
@@ -115,7 +115,7 @@ export default function GraduationPage() {
                 <motion.div variants={item} className="mx-auto my-4 h-px w-24 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
                 <motion.p variants={item} className="mb-6 text-sm text-slate-600">{today}</motion.p>
                 <motion.div variants={item} className="mt-4">
-                  <p className="font-serif text-2xl italic text-slate-300">Dr. Unplugged</p>
+                  <p className="text-2xl text-slate-300 font-serif-quote">Dr. Unplugged</p>
                   <div className="mx-auto mt-1 h-px w-40 bg-white/10" />
                   <p className="mt-1 text-[10px] uppercase tracking-[0.2em] text-slate-600">Chief Recovery Officer</p>
                 </motion.div>
@@ -126,7 +126,7 @@ export default function GraduationPage() {
 
         <motion.div variants={item}>
           <GlassCard className="p-6 text-center mb-6">
-            <p className="font-serif text-lg italic leading-relaxed text-slate-400">
+            <p className="text-lg leading-relaxed text-slate-400 font-serif-quote">
               &ldquo;Congratulations. You just completed a program designed by AI
               to help you stop using AI. The irony is not lost on us.&rdquo;
             </p>

@@ -6,6 +6,7 @@ import IntakeForm from "./pages/IntakeForm";
 import RecoveryStep from "./pages/RecoveryStep";
 import TherapyPage from "./pages/TherapyPage";
 import GraduationPage from "./pages/GraduationPage";
+import { JourneyProvider } from "./context/JourneyContext";
 
 function AnimatedRoutes() {
   return (
@@ -24,9 +25,11 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <AnimatedRoutes />
-      </Layout>
+      <JourneyProvider>
+        <Layout>
+          <AnimatedRoutes />
+        </Layout>
+      </JourneyProvider>
     </BrowserRouter>
   );
 }
