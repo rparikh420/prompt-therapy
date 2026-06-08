@@ -4,40 +4,7 @@ import { useState } from "react";
 import GlassCard from "../components/GlassCard";
 import Button from "../components/Button";
 import ProgressBar from "../components/ProgressBar";
-
-const STEPS = [
-  {
-    number: 1, name: "Admission", title: "Step 1: Admission", subtitle: "I have a problem",
-    quote: "The first step is admitting you have a problem. The second step is NOT asking ChatGPT how to admit it.",
-    exercise: "Close your eyes. Count how many AI tools you used today. Now double it, because you forgot the ones running in your IDE. Write that number below.",
-    inputType: "text", inputPlaceholder: "I confess... I used ___ AI tools today",
-  },
-  {
-    number: 2, name: "Reflection", title: "Step 2: Reflection", subtitle: "What did I actually DO today?",
-    quote: "Your git history shows 47 commits today. You wrote 3 of them. Who's the developer here?",
-    exercise: "List three things you accomplished today WITHOUT AI. If you can't think of three, that IS the exercise.",
-    inputType: "textarea", inputPlaceholder: "1. I...\n2. I also...\n3. Okay this is harder than I thought...",
-  },
-  {
-    number: 3, name: "The Inventory", title: "Step 3: The Inventory", subtitle: "Things I used to do myself",
-    quote: 'You asked an AI to write a FOR LOOP. A for-loop, bro. That\'s like asking someone to chew your food.',
-    exercise: "Check the boxes for skills you've outsourced to AI:",
-    inputType: "checkboxes",
-    checkboxOptions: ["Writing emails", "Naming variables", "Writing commit messages", "Debugging", "Googling", "Basic arithmetic", "Deciding what to eat"],
-  },
-  {
-    number: 4, name: "The Pledge", title: "Step 4: The Pledge", subtitle: "I will write my own for-loops",
-    quote: "Remember when you used to Google things and read Stack Overflow answers from 2014? Those were honest days.",
-    exercise: "Write your pledge below. What will you do differently tomorrow?",
-    inputType: "pledge", inputPlaceholder: "I, [your name], do solemnly swear that I will...",
-  },
-  {
-    number: 5, name: "The Shutdown", title: "Step 5: The Shutdown", subtitle: "Close the tabs. All of them.",
-    quote: "You don't need one more prompt. You need a glass of water and some sunlight.",
-    exercise: "It's time. Close every AI tab. Take 3 deep breaths. Then click the button below.",
-    inputType: "breathing",
-  },
-];
+import { STEPS } from '../../shared/content';
 
 function BreathingCircle() {
   return (

@@ -7,13 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import GlassCard from '../components/GlassCard';
 import Button from '../components/Button';
 import { colors } from '../theme';
-
-const NATURE_WEBCAMS = [
-  'https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-702',
-  'https://explore.org/livecams/african-wildlife/african-animal-lookout-camera',
-];
-
-const CONFETTI_COLORS = ['#8b5cf6', '#f472b6', '#34d399', '#fbbf24', '#60a5fa', '#f87171', '#a78bfa', '#fb923c'];
+import { NATURE_WEBCAMS, CONFETTI_COLORS } from '../../shared/content';
 
 const confettiPieces = Array.from({ length: 20 }, (_, i) => ({
   id: i,

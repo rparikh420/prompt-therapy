@@ -2,13 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import GlassCard from "../components/GlassCard";
 import Button from "../components/Button";
-
-const NATURE_WEBCAMS = [
-  "https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-702",
-  "https://explore.org/livecams/african-wildlife/african-animal-lookout-camera",
-  "https://www.youtube.com/watch?v=ydYDqZQpim8",
-  "https://www.youtube.com/watch?v=Cp3eFsULqSg",
-];
+import { NATURE_WEBCAMS, CONFETTI_COLORS } from '../../shared/content';
 
 function ConfettiPiece({ delay, x, size, color, shape }) {
   const isCircle = shape === "circle";
@@ -40,11 +34,6 @@ function ConfettiPiece({ delay, x, size, color, shape }) {
     />
   );
 }
-
-const CONFETTI_COLORS = [
-  "#8b5cf6", "#f472b6", "#34d399", "#fbbf24",
-  "#60a5fa", "#f87171", "#a78bfa", "#fb923c",
-];
 
 const confettiPieces = Array.from({ length: 30 }, (_, i) => ({
   id: i,

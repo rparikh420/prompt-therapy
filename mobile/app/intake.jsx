@@ -7,60 +7,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import GlassCard from '../components/GlassCard';
 import Button from '../components/Button';
 import { colors } from '../theme';
+import { questions, diagnoses, getDiagnosis, getQuestionScore } from '../../shared/content';
 
-const questions = [
-  {
-    id: 1, type: 'slider',
-    question: 'How many AI tabs do you have open right now?',
-    subtitle: 'Be honest. We can see your browser.',
-    min: 0, max: 20,
-    getScore: (val) => Math.round((val / 20) * 10),
-  },
-  {
-    id: 2, type: 'choice',
-    question: "When you get an error, what's your first instinct?",
-    subtitle: 'No judgment. Okay, maybe a little judgment.',
-    options: [
-      { label: 'Read the error message', score: 2, emoji: '🔍' },
-      { label: 'Google it', score: 4, emoji: '🔎' },
-      { label: 'Paste it into Claude', score: 8, emoji: '🤖' },
-      { label: 'Paste it into Claude AND ChatGPT simultaneously', score: 10, emoji: '🚨' },
-    ],
-  },
-  {
-    id: 3, type: 'choice',
-    question: 'Have you ever asked AI to write a commit message?',
-    subtitle: 'Co-Authored-By: Your Conscience',
-    options: [
-      { label: 'Never', score: 1, emoji: '😇' },
-      { label: 'Once or twice', score: 4, emoji: '😅' },
-      { label: "It's my co-author on every commit", score: 8, emoji: '🫣' },
-      { label: 'I asked it to write this answer', score: 10, emoji: '💀' },
-    ],
-  },
-  {
-    id: 4, type: 'choice',
-    question: 'When was the last time you wrote code without AI assistance?',
-    subtitle: "Take your time. We'll wait.",
-    options: [
-      { label: 'Today', score: 2, emoji: '💪' },
-      { label: 'This week', score: 4, emoji: '😬' },
-      { label: "I genuinely can't remember", score: 8, emoji: '😶' },
-      { label: 'What does "without AI" mean?', score: 10, emoji: '☠️' },
-    ],
-  },
-];
-
-const diagnoses = [
-  { max: 15, label: 'Mild Curiosity', description: "You're fine. You use AI like a normal person. But the fact that you're HERE means you suspect something...", color: colors.success },
-  { max: 25, label: 'Developing Dependency', description: "You tell yourself you could stop anytime. You just choose not to. That's literally what every addict says, but sure, you're \"different.\"", color: colors.warning },
-  { max: 35, label: 'Full-Blown Addiction', description: "You haven't typed a for-loop in months. Your Stack Overflow reputation is gathering dust.", color: '#f97316' },
-  { max: Infinity, label: 'Terminal Promptitis', description: "This is the worst case we've ever seen. You probably asked AI to fill out this form for you. Did you? DID YOU?", color: colors.accent },
-];
-
-function getDiagnosis(score) {
-  return diagnoses.find((d) => score <= d.max);
-}
+// Map shared colorKey to native color values
+const colorKeyToNative = {
+  success: colors.success,
+  warning: colors.warning,
+  orange: '#f97316',
+  accent: colors.accent,
+};
 
 function ProgressDots({ current, total }) {
   return (
@@ -141,17 +96,9 @@ export default function IntakeForm() {
   const currentAnswer = answers[currentQ];
   const hasAnswer = currentAnswer !== undefined;
 
-  function getQuestionScore(qIndex) {
-    const q = questions[qIndex];
-    const ans = answers[qIndex];
-    if (ans === undefined) return 0;
-    if (q.type === 'slider') return q.getScore(ans);
-    return q.options[ans].score;
-  }
-
   function handleNext() {
     if (isLastQuestion) {
-      const total = questions.reduce((sum, _, i) => sum + getQuestionScore(i), 0);
+      const total = questions.reduce((sum, _, i) => sum + getQuestionScore(questions, answers, i), 0);
       setScore(total);
       setShowDiagnosis(true);
     } else {
@@ -159,7 +106,8 @@ export default function IntakeForm() {
     }
   }
 
-  const diagnosis = getDiagnosis(score);
+  const diagnosisData = getDiagnosis(score);
+  const diagnosis = diagnosisData ? { ...diagnosisData, color: colorKeyToNative[diagnosisData.colorKey] } : diagnosisData;
 
   return (
     <SafeAreaView style={styles.safe}>

@@ -1,14 +1,13 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { colors } from '../theme';
-
-const STEPS = ['Admission', 'Reflection', 'Inventory', 'Pledge', 'Shutdown'];
+import { STEP_NAMES } from '../../shared/content';
 
 export default function ProgressBar({ currentStep }) {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.baseLine} />
-        {STEPS.map((label, i) => {
+        {STEP_NAMES.map((label, i) => {
           const stepNum = i + 1;
           const isCompleted = stepNum < currentStep;
           const isCurrent = stepNum === currentStep;

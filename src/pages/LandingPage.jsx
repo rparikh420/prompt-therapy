@@ -3,18 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import GlassCard from "../components/GlassCard";
 import Button from "../components/Button";
-
-const quotes = [
-  "You asked ChatGPT to write your Tinder bio. It got more matches than you.",
-  "Your Stack Overflow reputation is gathering dust.",
-  "You have 14 AI tabs open. That's not multitasking, that's group therapy.",
-  "Remember when you used to debug with console.log? Those were honest days.",
-  "You copy-pasted an error into Claude without reading it. It said 'file not found.' THE FILE WASN'T THERE.",
-  "Your git history shows 47 commits today. You wrote 3 of them. Who's the developer here?",
-  "You asked an AI to write a FOR LOOP. The for-loop, bro. That's like asking someone to tie your shoes.",
-];
-
-const ROTATION_INTERVAL = 4000;
+import { quotes, ROTATION_INTERVAL } from '../../shared/content';
 
 export default function LandingPage() {
   const [quoteIndex, setQuoteIndex] = useState(0);
